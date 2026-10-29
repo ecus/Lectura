@@ -2,6 +2,11 @@
 
 Lector de PDF para iPhone y iPad (y cualquier navegador) que muestra tus PDF como un libro:
 
+- **Texto adaptado a la pantalla** (botón **Aa**): analiza el PDF, rearma los párrafos y los reparte en páginas
+  a tu medida. Tamaño y tipo de letra, interlineado, márgenes y justificado. Las páginas sin texto
+  (ilustraciones) se muestran como imagen. Con **Aa** vuelves al PDF original cuando quieras.
+- **Índice automático**: detecta capítulos y secciones por el tamaño de letra y palabras como
+  "Capítulo", "Parte" o "Introducción", aunque el PDF no traiga índice.
 - **Efecto de hoja real**: arrastra una esquina para doblar la página, desliza o toca los bordes.
 - **Dos páginas** en el iPad horizontal, una en el iPhone (o elige tú en Ajustes).
 - **Marcadores personalizados**: nombre, color, nota; aparecen como cinta en la página y en la barra.
@@ -31,6 +36,6 @@ Es una web estática sin compilación. Para probarla en local:
 python3 -m http.server 8000
 ```
 
-Librerías incluidas en `vendor/`: [pdf.js](https://github.com/mozilla/pdf.js) 4.10.38 (Apache-2.0) y
+El análisis del texto está en `text.js`. Librerías incluidas en `vendor/`: [pdf.js](https://github.com/mozilla/pdf.js) 4.10.38 (Apache-2.0) y
 [StPageFlip](https://github.com/Nodlik/StPageFlip) 2.0.7 (MIT).
 Al cambiar archivos, sube `VERSION` en `sw.js` para que los dispositivos reciban la actualización.

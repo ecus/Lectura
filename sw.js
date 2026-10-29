@@ -1,11 +1,12 @@
 // Guarda la app en el dispositivo para que funcione sin internet.
 // Sube VERSION cuando cambies archivos para que los usuarios reciban la actualización.
-const VERSION = 'lectura-v1';
+const VERSION = 'lectura-v2';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
+  './text.js',
   './manifest.webmanifest',
   './vendor/pdf.min.mjs',
   './vendor/pdf.worker.min.mjs',

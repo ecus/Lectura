@@ -192,6 +192,11 @@ h1, h2, h3 { margin: 0; letter-spacing: -.01em; }
 #reader.chrome-hidden .bar.top { transform: translateY(-100%); opacity: 0; pointer-events: none; }
 #reader.chrome-hidden .bar.bottom { transform: translateY(100%); opacity: 0; pointer-events: none; }
 .mark-btn.on { color: var(--on, var(--accent)); }
+.view-btn span {
+  font: 600 15px/1 Georgia, "Iowan Old Style", serif; padding: 4px 6px; border-radius: 7px;
+  border: 1.6px solid currentColor; opacity: .9;
+}
+.view-btn.on span { background: #f4ece1; color: #2a1d17; border-color: #f4ece1; }
 .mark-btn.on .ic { fill: currentColor; }
 
 .scrub { position: relative; flex: 1; height: 44px; display: flex; align-items: center; }
@@ -306,3 +311,55 @@ dialog::backdrop { background: rgba(10, 6, 4, .45); backdrop-filter: blur(2px); 
   animation: toastIn .25s ease;
 }
 @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 8px); } }
+
+/* ===== Vista de texto adaptado ===== */
+#reader { --ink: #1f1a17; --ink-soft: rgba(31, 26, 23, .5); }
+#reader[data-paper="sepia"] { --ink: #4a3a2c; --ink-soft: rgba(74, 58, 44, .55); }
+#reader[data-paper="night"] { --ink: #d4cbbd; --ink-soft: rgba(212, 203, 189, .45); }
+.tpage {
+  display: flex; flex-direction: column; color: var(--ink);
+  padding: calc(var(--t-pad, 24px) * .6) var(--t-pad, 24px) calc(var(--t-pad, 24px) * .5);
+  font-family: var(--t-font, Georgia, serif); font-size: var(--t-size, 19px); line-height: var(--t-lh, 1.6);
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+}
+.tpage .thead, .tpage .tfoot {
+  flex: none; height: 2.2em; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; line-height: 1; letter-spacing: .08em; color: var(--ink-soft);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tpage .thead { text-transform: uppercase; font-size: 10.5px; display: block; text-align: center; line-height: 2.2em; }
+.tpage .tbody {
+  flex: 1; min-height: 0; overflow: hidden; position: relative;
+  text-align: var(--t-align, justify); hyphens: auto; -webkit-hyphens: auto;
+  overflow-wrap: break-word; word-break: normal;
+}
+.tpage .tbody p { margin: 0; text-indent: 1.4em; }
+.tpage .tbody p.first, .tpage .tbody p.cont, .tpage .tbody h3 + p { text-indent: 0; }
+.tpage .tbody p.split { text-align-last: var(--t-align, justify); }
+.tpage .tbody p.first::first-letter {
+  float: left; font-size: 3.1em; line-height: .85; padding: .08em .08em 0 0; font-weight: 600; color: var(--accent);
+}
+.tpage .tbody h3 { margin: 0; font-weight: 700; text-align: left; hyphens: manual; -webkit-hyphens: manual; text-indent: 0; line-height: 1.25; }
+.tpage .tbody h3.h1 { font-size: 1.55em; margin: 1.6em 0 1.1em; text-align: center; }
+.tpage .tbody h3.h2 { font-size: 1.22em; margin: 1em 0 .5em; }
+.tpage .tbody h3.h3 { font-size: 1em; margin: .9em 0 .35em; letter-spacing: .04em; }
+.tpage .tbody > :first-child { margin-top: 0; }
+.tpage .tbody > h3.h1:first-child { margin-top: 1.4em; }
+.tpage figure.timg { margin: .4em auto; background: rgba(127,127,127,.12); border-radius: 4px; overflow: hidden; }
+.tpage figure.timg img { width: 100%; height: 100%; object-fit: contain; display: block; position: static; }
+.tpage.cover { padding: 0; }
+.tpage.cover img { filter: none !important; mix-blend-mode: normal !important; }
+#reader.textview .page.--left .tbody, #reader.textview .page.--right .tbody { position: relative; }
+#reader.textview .page-inner::after { display: none; }
+#reader.textview .page.--left { box-shadow: inset -14px 0 18px -14px rgba(0,0,0,.35); }
+#reader.textview .page.--right { box-shadow: inset 14px 0 18px -14px rgba(0,0,0,.35); }
+#reader.textview.single .page { box-shadow: inset 8px 0 10px -8px rgba(0,0,0,.2); }
+
+.stepper { display: flex; align-items: center; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 3px; }
+.stepper button { flex: 1; border: 0; background: transparent; padding: 6px; border-radius: 9px; cursor: pointer; font-family: Georgia, serif; }
+.stepper button:active { background: var(--surface); }
+.stepper small { font-size: 15px; }
+.stepper big { font-size: 24px; line-height: 1; }
+.stepper output { min-width: 56px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.list .empty-row.small { padding: 4px 18px 12px; font-size: 13px; border-top: 0; }

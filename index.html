@@ -77,10 +77,10 @@
     <header class="bar top">
       <button class="icon-btn" id="btnBack" aria-label="Biblioteca"><svg class="ic"><use href="#i-back" /></svg></button>
       <div class="title" id="bookTitle"></div>
+      <button class="icon-btn view-btn" id="btnView" aria-label="Ver texto adaptado"><span>Aa</span></button>
       <button class="icon-btn mark-btn" id="btnMark" aria-label="Marcar esta página"><svg class="ic"><use href="#i-mark-add" /></svg></button>
       <button class="icon-btn" id="btnToc" aria-label="Índice"><svg class="ic"><use href="#i-list" /></svg></button>
       <button class="icon-btn" id="btnMarks" aria-label="Mis marcadores"><svg class="ic"><use href="#i-bookmarks" /></svg></button>
-      <button class="icon-btn" id="btnZoom" aria-label="Lupa"><svg class="ic"><use href="#i-zoom" /></svg></button>
       <button class="icon-btn" id="btnSettings" aria-label="Ajustes"><svg class="ic"><use href="#i-gear" /></svg></button>
     </header>
 
@@ -90,6 +90,7 @@
         <div class="ticks" id="ticks"></div>
         <input type="range" id="slider" min="1" max="1" value="1" aria-label="Ir a página">
       </div>
+      <button class="icon-btn" id="btnZoom" aria-label="Lupa"><svg class="ic"><use href="#i-zoom" /></svg></button>
       <div class="pageno" id="pageNo">1 / 1</div>
       <button class="icon-btn" id="btnNext" aria-label="Página siguiente"><svg class="ic"><use href="#i-next" /></svg></button>
     </footer>
@@ -140,6 +141,7 @@
       <h3>Índice</h3>
       <button class="icon-btn" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
     </div>
+    <div class="chips" id="tocTabs"></div>
     <form class="goto" id="gotoForm">
       <label>Ir a la página <input id="gotoInput" type="number" min="1" inputmode="numeric"></label>
       <button class="btn primary" type="submit">Ir</button>
@@ -151,6 +153,40 @@
     <div class="sheet-head">
       <h3>Ajustes de lectura</h3>
       <button class="icon-btn" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+    <div class="setting"><span>Vista</span>
+      <div class="seg" data-setting="view">
+        <button data-v="text">Texto adaptado</button><button data-v="pdf">PDF original</button>
+      </div>
+    </div>
+    <div id="textSettings">
+      <div class="setting"><span>Tamaño de letra</span>
+        <div class="stepper">
+          <button type="button" data-tsize="-1" aria-label="Letra más pequeña"><small>A</small></button>
+          <output id="tsVal">19</output>
+          <button type="button" data-tsize="1" aria-label="Letra más grande"><big>A</big></button>
+        </div>
+      </div>
+      <div class="setting"><span>Letra</span>
+        <div class="seg" data-setting="tfont">
+          <button data-v="serif" style="font-family: Georgia, serif">Clásica</button><button data-v="sans">Moderna</button>
+        </div>
+      </div>
+      <div class="setting"><span>Interlineado</span>
+        <div class="seg" data-setting="tlh">
+          <button data-v="1.4">Compacto</button><button data-v="1.6">Normal</button><button data-v="1.85">Amplio</button>
+        </div>
+      </div>
+      <div class="setting"><span>Márgenes</span>
+        <div class="seg" data-setting="tmargin">
+          <button data-v="s">Estrechos</button><button data-v="m">Normales</button><button data-v="l">Amplios</button>
+        </div>
+      </div>
+      <div class="setting"><span>Alineación</span>
+        <div class="seg" data-setting="talign">
+          <button data-v="justify">Justificado</button><button data-v="left">A la izquierda</button>
+        </div>
+      </div>
     </div>
     <div class="setting"><span>Papel</span>
       <div class="seg" data-setting="paper">
@@ -172,7 +208,7 @@
         <button data-v="on">Sí</button><button data-v="off">No</button>
       </div>
     </div>
-    <p class="fine">Toca el borde derecho o izquierdo para pasar de página, o arrastra una esquina para doblar la hoja. Toca el centro para ocultar los controles.</p>
+    <p class="fine">Toca el borde derecho o izquierdo para pasar de página, o arrastra una esquina para doblar la hoja. Toca el centro para ocultar los controles. Con <b>Aa</b> cambias entre el texto adaptado a tu pantalla y el PDF original.</p>
   </dialog>
 
   <dialog id="bookMenu" class="sheet">
