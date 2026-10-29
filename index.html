@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Lectura</title>
+  <meta name="description" content="Lee tus PDF como un libro: efecto de hoja, marcadores personalizados y biblioteca sin conexión.">
+  <meta name="theme-color" content="#2c1826">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Lectura">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icons/favicon-32.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="vendor/page-flip.browser.js" defer></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" /></symbol>
+      <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" /></symbol>
+      <symbol id="i-mark-add" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4.5L6 21z" /><path class="plus" d="M12 7v6M9 10h6" /></symbol>
+      <symbol id="i-bookmarks" viewBox="0 0 24 24"><path d="M8 3h11v16l-5.5-4L8 19z" /><path d="M5 6v15l5-3.6" /></symbol>
+      <symbol id="i-zoom" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5M11 8v6M8 11h6" /></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" /></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2" /><circle cx="12" cy="12" r="1.2" /><circle cx="19" cy="12" r="1.2" /></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z" /><path d="M14 6l4 4" /></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4" /><path d="M5 12v8h14v-8" /></symbol>
+    </defs>
+  </svg>
+
+  <!-- ===== Biblioteca ===== -->
+  <main id="library" class="view">
+    <header class="lib-header">
+      <div class="brand">
+        <img src="icons/icon-192.png" alt="" width="40" height="40">
+        <div>
+          <h1>Lectura</h1>
+          <p class="sub" id="libCount">Tu biblioteca</p>
+        </div>
+      </div>
+      <label class="btn primary" for="fileInput">
+        <svg class="ic"><use href="#i-plus" /></svg><span>Añadir PDF</span>
+      </label>
+      <input id="fileInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+    </header>
+
+    <div id="installHint" class="hint" hidden>
+      <svg class="ic"><use href="#i-share" /></svg>
+      <p>Para instalarla en tu iPhone o iPad: toca <b>Compartir</b> y luego <b>Agregar a inicio</b>. Después importa tus PDF desde la app instalada.</p>
+      <button class="icon-btn" id="hideHint" aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+
+    <section id="shelf" class="shelf"></section>
+
+    <div id="emptyState" class="empty" hidden>
+      <div class="empty-book"></div>
+      <h2>Tu biblioteca está vacía</h2>
+      <p>Toca <b>Añadir PDF</b> y elige un archivo de la app Archivos, iCloud o tus descargas. Se guarda en este dispositivo y podrás leerlo sin internet.</p>
+    </div>
+  </main>
+
+  <!-- ===== Lector ===== -->
+  <section id="reader" class="view" hidden data-paper="white">
+    <div id="stage" class="stage">
+      <div id="bookHost" class="book-host"></div>
+    </div>
+
+    <header class="bar top">
+      <button class="icon-btn" id="btnBack" aria-label="Biblioteca"><svg class="ic"><use href="#i-back" /></svg></button>
+      <div class="title" id="bookTitle"></div>
+      <button class="icon-btn mark-btn" id="btnMark" aria-label="Marcar esta página"><svg class="ic"><use href="#i-mark-add" /></svg></button>
+      <button class="icon-btn" id="btnToc" aria-label="Índice"><svg class="ic"><use href="#i-list" /></svg></button>
+      <button class="icon-btn" id="btnMarks" aria-label="Mis marcadores"><svg class="ic"><use href="#i-bookmarks" /></svg></button>
+      <button class="icon-btn" id="btnZoom" aria-label="Lupa"><svg class="ic"><use href="#i-zoom" /></svg></button>
+      <button class="icon-btn" id="btnSettings" aria-label="Ajustes"><svg class="ic"><use href="#i-gear" /></svg></button>
+    </header>
+
+    <footer class="bar bottom">
+      <button class="icon-btn" id="btnPrev" aria-label="Página anterior"><svg class="ic"><use href="#i-back" /></svg></button>
+      <div class="scrub">
+        <div class="ticks" id="ticks"></div>
+        <input type="range" id="slider" min="1" max="1" value="1" aria-label="Ir a página">
+      </div>
+      <div class="pageno" id="pageNo">1 / 1</div>
+      <button class="icon-btn" id="btnNext" aria-label="Página siguiente"><svg class="ic"><use href="#i-next" /></svg></button>
+    </footer>
+    <div class="scrub-bubble" id="scrubBubble" hidden></div>
+  </section>
+
+  <!-- ===== Lupa ===== -->
+  <section id="zoom" class="zoom" hidden>
+    <div class="zoom-scroll" id="zoomScroll"><img id="zoomImg" alt=""></div>
+    <div class="zoom-bar">
+      <button class="icon-btn" id="zPrev" aria-label="Página anterior"><svg class="ic"><use href="#i-back" /></svg></button>
+      <button class="icon-btn" id="zOut" aria-label="Alejar"><svg class="ic"><use href="#i-minus" /></svg></button>
+      <span id="zLabel">100%</span>
+      <button class="icon-btn" id="zIn" aria-label="Acercar"><svg class="ic"><use href="#i-plus" /></svg></button>
+      <button class="icon-btn" id="zNext" aria-label="Página siguiente"><svg class="ic"><use href="#i-next" /></svg></button>
+      <button class="icon-btn" id="zClose" aria-label="Cerrar lupa"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+  </section>
+
+  <!-- ===== Hojas / diálogos ===== -->
+  <dialog id="markDialog" class="sheet">
+    <form method="dialog" id="markForm">
+      <h3 id="markDialogTitle">Nuevo marcador</h3>
+      <label class="field"><span>Nombre</span><input id="mName" maxlength="80" autocomplete="off"></label>
+      <label class="field"><span>Página</span><input id="mPage" type="number" min="1" inputmode="numeric"></label>
+      <div class="field"><span>Color</span><div class="swatches" id="mColors"></div></div>
+      <label class="field"><span>Nota</span><textarea id="mNote" rows="3" maxlength="1000" placeholder="Opcional: una idea, una cita, por qué lo marcaste…"></textarea></label>
+      <div class="actions">
+        <button type="button" class="btn danger" id="mDelete" hidden>Eliminar</button>
+        <span class="grow"></span>
+        <button type="button" class="btn" id="mCancel">Cancelar</button>
+        <button type="submit" class="btn primary" id="mSave">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="marksSheet" class="sheet tall">
+    <div class="sheet-head">
+      <h3>Marcadores</h3>
+      <button class="icon-btn" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+    <div class="chips" id="markFilter"></div>
+    <ul class="list" id="markList"></ul>
+  </dialog>
+
+  <dialog id="tocSheet" class="sheet tall">
+    <div class="sheet-head">
+      <h3>Índice</h3>
+      <button class="icon-btn" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+    <form class="goto" id="gotoForm">
+      <label>Ir a la página <input id="gotoInput" type="number" min="1" inputmode="numeric"></label>
+      <button class="btn primary" type="submit">Ir</button>
+    </form>
+    <ul class="list toc" id="tocList"></ul>
+  </dialog>
+
+  <dialog id="settingsSheet" class="sheet">
+    <div class="sheet-head">
+      <h3>Ajustes de lectura</h3>
+      <button class="icon-btn" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close" /></svg></button>
+    </div>
+    <div class="setting"><span>Papel</span>
+      <div class="seg" data-setting="paper">
+        <button data-v="white">Blanco</button><button data-v="sepia">Sepia</button><button data-v="night">Noche</button>
+      </div>
+    </div>
+    <div class="setting"><span>Páginas</span>
+      <div class="seg" data-setting="layout">
+        <button data-v="auto">Automático</button><button data-v="single">Una</button><button data-v="double">Dos</button>
+      </div>
+    </div>
+    <div class="setting"><span>Velocidad de la hoja</span>
+      <div class="seg" data-setting="speed">
+        <button data-v="450">Rápida</button><button data-v="800">Normal</button><button data-v="1300">Lenta</button>
+      </div>
+    </div>
+    <div class="setting"><span>Sonido de página</span>
+      <div class="seg" data-setting="sound">
+        <button data-v="on">Sí</button><button data-v="off">No</button>
+      </div>
+    </div>
+    <p class="fine">Toca el borde derecho o izquierdo para pasar de página, o arrastra una esquina para doblar la hoja. Toca el centro para ocultar los controles.</p>
+  </dialog>
+
+  <dialog id="bookMenu" class="sheet">
+    <h3 id="bmTitle"></h3>
+    <label class="field"><span>Título</span><input id="bmName" maxlength="120"></label>
+    <div class="actions">
+      <button type="button" class="btn danger" id="bmDelete">Eliminar libro</button>
+      <span class="grow"></span>
+      <button type="button" class="btn" id="bmCancel">Cancelar</button>
+      <button type="button" class="btn primary" id="bmSave">Guardar</button>
+    </div>
+  </dialog>
+
+  <div id="busy" class="busy" hidden><div class="spinner"></div><p id="busyText">Cargando…</p></div>
+  <div id="toast" class="toast" hidden></div>
+</body>
+</html>
